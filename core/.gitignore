@@ -1,0 +1,11 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+*.out
+
+# macOS trash
+.DS_Store

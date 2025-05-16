@@ -1,0 +1,39 @@
+# Core requirements
+python-dotenv==1.0.0
+requests==2.31.0
+chardet>=4.0.0
+charset-normalizer>=2.0.0
+urllib3>=1.26.0
+certifi>=2021.10.8
+idna>=2.10
+numpy==2.2.0
+ccxt==4.1.22
+
+# OpenAI API
+openai==1.3.0
+
+# Logging and utilities
+colorlog==6.7.0
+
+# For future data analysis
+pandas==2.0.3
+matplotlib==3.7.2
+
+# Social media APIs
+praw==7.7.1
+tweepy==4.12.1
+
+# Technical analysis
+talib-binary>=0.4.0
+
+# For handling JSON data
+simplejson>=3.17.0
+
+# Date handling
+python-dateutil>=2.8.2
+
+# For web scraping
+beautifulsoup4>=4.9.3
+lxml>=4.6.3
+
+tiktoken==0.5.0
