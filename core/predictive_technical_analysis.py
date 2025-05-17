@@ -25,6 +25,7 @@ logger = logging.getLogger('crypto_bot.predictive_analysis')
 def get_ohlcv_data(symbol, timeframe='1h', limit=200):
     """
     Get OHLCV data for a cryptocurrency.
+    Uses technical_indicator_fetcher as the data source.
     
     Args:
         symbol (str): Cryptocurrency symbol
@@ -35,8 +36,13 @@ def get_ohlcv_data(symbol, timeframe='1h', limit=200):
         pd.DataFrame: DataFrame with OHLCV data
     """
     from core import technical_indicator_fetcher
+    import pandas as pd
+    import numpy as np
+    import logging
     
-    # Get historical data
+    logger = logging.getLogger('crypto_bot.predictive_analysis')
+    
+    # Get historical data from the technical indicator fetcher
     historical_data = technical_indicator_fetcher.get_historical_data(symbol, timeframe, limit)
     
     if not historical_data or len(historical_data) < 50:
@@ -46,15 +52,16 @@ def get_ohlcv_data(symbol, timeframe='1h', limit=200):
     # Convert to DataFrame
     df = pd.DataFrame(historical_data)
     
-    # Rename columns to standard OHLCV names
-    df = df.rename(columns={
-        'timestamp': 'timestamp',
-        'open': 'open',
-        'high': 'high',
-        'low': 'low',
-        'close': 'close',
-        'volume': 'volume'
-    })
+    # Rename columns to standard OHLCV names if needed
+    if not all(col in df.columns for col in ['open', 'high', 'low', 'close', 'volume']):
+        df = df.rename(columns={
+            'timestamp': 'timestamp',
+            'open': 'open',
+            'high': 'high',
+            'low': 'low',
+            'close': 'close',
+            'volume': 'volume'
+        })
     
     # Sort by timestamp (oldest first)
     df = df.sort_values('timestamp')
