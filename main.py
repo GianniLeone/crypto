@@ -8,6 +8,7 @@ while providing intelligent trading decisions combining multiple data sources.
 import time
 import logging
 import json
+import sys
 import os
 import random
 from datetime import datetime, timedelta
@@ -325,8 +326,8 @@ def gather_data_for_symbol(symbol):
     logger.info(f"Gathering data for {symbol}")
     
     # Get news headlines
-    news_headlines = news_fetcher.get_latest_headlines(limit=5)
-    news_sentiment = news_fetcher.analyze_sentiment(news_headlines)
+    news_headlines = enhanced_news_fetcher.get_latest_headlines(limit=5)
+    news_sentiment = enhanced_news_fetcher.analyze_sentiment(news_headlines)
     
     # Get market sentiment indicators
     # Replace whale_data_provider with unified_whale_data
@@ -340,7 +341,7 @@ def gather_data_for_symbol(symbol):
         "news_sentiment": news_sentiment,
         "whale_transactions": whale_signal,
         "fear_greed_index": fear_greed_fetcher.get_current_index(),
-        "social_media_sentiment": social_sentiment_fetcher.get_sentiment(symbol),
+        "social_media_sentiment": enhanced_social_sentiment.get_sentiment(symbol),
         "rsi": technical_indicator_fetcher.get_rsi(symbol),
         "macd_crossover": technical_indicator_fetcher.get_macd_signal(symbol),
         "volume_spike": technical_indicator_fetcher.check_volume_spike(symbol),
@@ -663,3 +664,12 @@ def main_loop():
         if HAS_GPT_ANALYZER and hasattr(gpt_analyzer, 'save_usage_stats'):
             gpt_analyzer.save_usage_stats()
         logger.info("Bot execution completed")
+
+if __name__ == "__main__":
+    # Check if HAS_GPT_ANALYZER is defined
+    HAS_GPT_ANALYZER = True
+    try:
+        validate_critical_components()
+        main_loop()
+    except Exception as e:
+        logger.error(f"Error during startup: {str(e)}", exc_info=True)

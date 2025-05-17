@@ -8,6 +8,7 @@ certifi>=2021.10.8
 idna>=2.10
 numpy==2.2.0
 ccxt==4.1.22
+scikit-learn
 
 # OpenAI API
 openai==1.3.0
