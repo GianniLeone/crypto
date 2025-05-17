@@ -10,6 +10,12 @@ This module extends the original GPT Fusion Analyzer with:
 Modified to function as the "main brain" that integrates all system components.
 """
 
+try:
+    import talib
+except ImportError:
+    # If TA-Lib is not available, use our compatibility layer
+    from core import talib_compatibility as talib
+
 import logging
 import json
 import random
