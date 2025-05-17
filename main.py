@@ -25,6 +25,9 @@ logging.basicConfig(
 logger = logging.getLogger('crypto_bot')
 
 # Import the modules that are working
+from core import free_market_data as market_data
+logger.info("✅ Using Free Market Data (Binance + fallbacks)")
+
 from core import enhanced_news_fetcher
 logger.info("✅ Using enhanced news data")
 
@@ -39,9 +42,6 @@ logger.info("✅ Using unified whale data")
 
 from core import fear_greed_fetcher
 logger.info("✅ Using fear & greed index")
-
-from core import crypto_compare_api
-logger.info("✅ Using CryptoCompare market data")
 
 from core import technical_indicator_fetcher
 logger.info("✅ Using technical indicators")
@@ -86,7 +86,7 @@ def validate_critical_components():
 
     # Check other critical APIs - for example, price data
     try:
-        btc_price = crypto_compare_api.get_price("BTC")
+        btc_price = market_data.get_price("BTC")
         if not btc_price:
             raise ValueError("Could not get BTC price")
         logger.info(f"Market data check passed: BTC price = ${btc_price}")
@@ -361,7 +361,7 @@ def gather_data_for_symbol(symbol):
     # Rest of the function remains unchanged
     try:
         # Get comprehensive market data
-        market_data = crypto_compare_api.get_market_data(symbol)
+        market_data = market_data.get_market_data(symbol)
         if market_data:
             logger.info(f"CryptoCompare data retrieved for {symbol}")
             crypto_data = {
@@ -493,7 +493,7 @@ def main_loop():
     try:
         # Try to get global market data
         try:
-            global_data = crypto_compare_api.get_global_market_data()
+            global_data = market_data.get_global_market_data()
             if global_data:
                 market_cap = global_data.get('market_cap_usd', 0) / 1e9
                 btc_dom = global_data.get('btc_dominance', 0)
@@ -514,7 +514,7 @@ def main_loop():
             
         # Try to get trending coins
         try:
-            trending = crypto_compare_api.get_trending_coins()
+            trending = market_data.get_trending_coins()
             if trending and len(trending) > 0:
                 trending_names = [f"{coin.get('name')} ({coin.get('symbol')})" for coin in trending[:3]]
                 logger.info(f"Trending coins: {', '.join(trending_names)}")
@@ -617,7 +617,7 @@ def main_loop():
             
             # Update global market data for the next cycle
             try:
-                updated_global_data = crypto_compare_api.get_global_market_data()
+                updated_global_data = market_data.get_global_market_data()
                 if updated_global_data:
                     global_market_context = {
                         'market_cap_usd': updated_global_data.get('market_cap_usd', 0),
